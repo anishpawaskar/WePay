@@ -10,3 +10,15 @@ const accountsSchema = new mongoose.Schema({
 });
 
 const Accounts = mongoose.model("accounts", accountsSchema);
+
+export const createNewAccount = async (userId) => {
+  await Accounts.create({
+    userId,
+    balance: Math.floor(Math.random() * 10000) * 100,
+  });
+};
+
+export const findAccountByUserId = async (userId) => {
+  const account = await Accounts.findOne({ userId }).exec();
+  return account;
+};
