@@ -1,5 +1,9 @@
 import { createNewUserModel, findUserByUsername } from "../models/users.js";
-import { generateHashPassword, generateJwt } from "../utils/auth.js";
+import {
+  compareHashPassword,
+  generateHashPassword,
+  generateJwt,
+} from "../utils/auth.js";
 
 export const signupUser = async (req, res) => {
   const { username, firstName, lastName, password } = req.body;
@@ -18,11 +22,39 @@ export const signupUser = async (req, res) => {
       hashPassword: await generateHashPassword(password),
     });
 
-    const token = generateJwt({ userName: newUser._id });
+    const token = generateJwt({ user: newUser._id });
 
     res.status(201).json({ message: "New user created.", token });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Error while signing up user." });
+  }
+};
+
+export const signinUser = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await findUserByUsername(username);
+
+    if (!user) {
+      return res.status(404).json({ message: "Email is invalid." });
+    }
+
+    const matchPassword = await compareHashPassword(
+      password,
+      user.hashPassword
+    );
+
+    if (!matchPassword) {
+      return res.status(411).json({ message: "Password is invalid." });
+    }
+
+    const token = generateJwt({ user: user._id });
+
+    res.status(200).json({ message: "User logged in successfully.", token });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error while signing in." });
   }
 };
