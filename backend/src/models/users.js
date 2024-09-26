@@ -40,3 +40,23 @@ export const findUsers = async (filter) => {
 
   return users;
 };
+
+export const findUserByIdAndUpdate = async (userId, body) => {
+  try {
+    const user = await Users.findOneAndUpdate({ _id: userId }, body, {
+      new: true,
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  } catch (err) {
+    if (err instanceof mongoose.CastError) {
+      throw new Error("User not found");
+    }
+
+    throw err;
+  }
+};
