@@ -1,11 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
 import indexRouter from "./routes/index.js";
+import { connectToDb } from "./config/database.js";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+connectToDb();
 
 app.use(indexRouter);
 
