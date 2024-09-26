@@ -1,3 +1,4 @@
+import { createNewAccount } from "../models/accounts.js";
 import { createNewUserModel, findUserByUsername } from "../models/users.js";
 import {
   compareHashPassword,
@@ -23,6 +24,8 @@ export const signupUser = async (req, res) => {
     });
 
     const token = generateJwt({ userId: newUser._id });
+
+    await createNewAccount(newUser._id);
 
     res.status(201).json({ message: "New user created.", token });
   } catch (err) {
