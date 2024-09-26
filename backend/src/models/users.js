@@ -18,3 +18,25 @@ export const findUserByUsername = async (username) => {
   const user = await Users.findOne({ username }).exec();
   return user;
 };
+
+export const findUsers = async (filter) => {
+  const users = await Users.find(
+    {
+      $or: [
+        {
+          firstName: {
+            $regex: filter,
+          },
+        },
+        {
+          lastName: {
+            $regex: filter,
+          },
+        },
+      ],
+    },
+    { hashPassword: 0 }
+  ).exec();
+
+  return users;
+};
