@@ -22,7 +22,7 @@ export const signupUser = async (req, res) => {
       hashPassword: await generateHashPassword(password),
     });
 
-    const token = generateJwt({ user: newUser._id });
+    const token = generateJwt({ userId: newUser._id });
 
     res.status(201).json({ message: "New user created.", token });
   } catch (err) {
@@ -50,7 +50,7 @@ export const signinUser = async (req, res) => {
       return res.status(411).json({ message: "Password is invalid." });
     }
 
-    const token = generateJwt({ user: user._id });
+    const token = generateJwt({ userId: user._id });
 
     res.status(200).json({ message: "User logged in successfully.", token });
   } catch (err) {
