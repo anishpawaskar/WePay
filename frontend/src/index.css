@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Manrope", sans-serif;
+}
+
+:root {
+  --primary-color: #fff;
+  --secondary-color: #0e0e0e;
+  --light-purple: #b4aff0;
+}
